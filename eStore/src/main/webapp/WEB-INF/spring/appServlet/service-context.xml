@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 이 설정이 되어있어야 Annotation 기능을 활성화 시켜 사용 가능하다. -->
+	<context:annotation-config></context:annotation-config>
+
+	<!-- 스프링이 베이스패키지를 읽어들여 @Component()가 있는지 스캔해 줄 패키지 지정 -->
+	<context:component-scan base-package="kr.ac.hansung.cse.service"></context:component-scan>
+
+</beans>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<!-- definition 하나가 하나의 웹페이지를 나타낸다고 생각하면 된다. -->
+<tiles-definitions>
+	<!-- definition은 상속의 개념이 있으므로 상속을 위해 base definition을 정의한다. -->
+  <definition name="base" template="/WEB-INF/tiles/layout.jsp">
+    <put-attribute name="title" value="eStore Page" />
+    <put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
+  </definition>
+  
+  <!-- base definition을 상속받는 home definition. -->
+  <!-- title은 재정의, menu와 footer는 그대로 사용, body는 추가해줌. -->
+  <definition name="home" extends="base">
+    <put-attribute name="title" value="eStore HomePage" />
+    <put-attribute name="body" value="/WEB-INF/views/home.jsp" />
+  </definition>
+  
+  <!-- base definition을 상속받는 products definition. -->
+  <!-- title은 재정의, menu와 footer는 그대로 사용, body는 추가해줌. -->
+  <definition name="products" extends="base">
+    <put-attribute name="title" value="Products Page" />
+    <put-attribute name="body" value="/WEB-INF/views/products.jsp" />
+  </definition>
+  
+  <!-- base definition을 상속받는 admin definition. -->
+  <definition name="admin" extends="base">
+    <put-attribute name="title" value="Administrator Page" />
+    <put-attribute name="body" value="/WEB-INF/views/admin.jsp" />
+  </definition>
+  
+  <!-- base definition을 상속받는 productInventory definition. -->
+  <definition name="productInventory" extends="base">
+    <put-attribute name="title" value="Product Inventory Page" />
+    <put-attribute name="body" value="/WEB-INF/views/productInventory.jsp" />
+  </definition>
+  
+  <!-- base definition을 상속받는 addProduct definition. -->
+  <definition name="addProduct" extends="base">
+    <put-attribute name="title" value="Add Product Page" />
+    <put-attribute name="body" value="/WEB-INF/views/addProduct.jsp" />
+  </definition>
+  
+  <!-- base definition을 상속받는 updateProduct definition. -->
+  <definition name="updateProduct" extends="base">
+    <put-attribute name="title" value="Update Product Page" />
+    <put-attribute name="body" value="/WEB-INF/views/updateProduct.jsp" />
+  </definition>
+  
+  <!-- base definition을 상속받는 viewProduct definition. -->
+  <definition name="viewProduct" extends="base">
+    <put-attribute name="title" value="Product Detail Page" />
+    <put-attribute name="body" value="/WEB-INF/views/viewProduct.jsp" />
+  </definition>
+  
+  <!-- base definition을 상속받는 viewProduct definition. -->
+  <definition name="cart" extends="base">
+    <put-attribute name="title" value="Cart Information Page" />
+    <put-attribute name="body" value="/WEB-INF/views/cart.jsp" />
+  </definition>
+  
+</tiles-definitions>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<!-- Bean을 설정해주면 Spring Container에서 싱글톤으로 해당 Bean 객체를 생성하여 관리해준다 -->
+
+	<!-- DataSource에 관한 Bean -->
+	<!-- 이 부분은 hibernate+spring에서도 동일하게 사용 -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<!--dirverClassNAme에는 JDBC Driver class name을 넣어줘야한다. -->
+		<property name="driverClassName"
+			value="${jdbc.driverClassName}" />
+		<!-- url에는 Database Server의 url을 넣어줘야 -->
+		<property name="url" value="${jdbc.url}" />
+		<!-- username과 password는 Database에 접근하기 위한 계정 정보임 -->
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<!-- 위의 property의 placeholder의 jdbc가 어떤 파일인지 명시해주기 위한 설정 -->
+	<context:property-placeholder
+		location="/WEB-INF/props/jdbc.properties" />
+
+	<!-- 이 설정이 되어있어야 Annotation 기능을 활성화 시켜 사용 가능하다. -->
+	<context:annotation-config></context:annotation-config>
+
+	<!-- 스프링이 베이스패키지를 읽어들여 @Component(),@Repository가 있는지 스캔해 줄 패키지 지정 -->
+	<context:component-scan
+		base-package="kr.ac.hansung.cse.dao"></context:component-scan>
+
+	<!-- SessionFactory Bean 설정 부분, Hibernate를 사용하기 위한 설정 부분임 -->
+	<!-- Hibernate 단독 사용 시에는 이 부분을 hibernate.cfg.xml 파일을 생성하여 그 파일에 넣어줬었음 -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- kr.ac.hansung.cse.model 패키지를 스캔해서 @Entity를 찾아 해당 클래스를 찾아 DB 테이블로 매핑해준다. -->
+		<property name="packagesToScan">
+			<list>
+				<value>kr.ac.hansung.cse.model</value>
+			</list>
+		</property>
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+				<!-- create으로 해주면 기존에 테이블이 존재하면 삭제하고 항상 새 테이블을 생성한다. -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<!-- SessionFactory Bean 등록 시 id와 ref=" "에 들어가는 값이 일치해야한다. -->
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- SessionFactory는 DataSource를 활용하고, TransactionManager는 SessionFactory를 활용한다. -->
+
+</beans>

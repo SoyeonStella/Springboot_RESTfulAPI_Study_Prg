@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+	xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<!-- url이 "/resources/**"로 오게되면 src/main/webapp에 있는 "/resources/"로 맵핑 시켜줌 -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+
+	<!-- 베이스패키지를 컴포넌트 스캔해서 컨트롤러 어노테이션이 등록 되어있는 부분을 빈으로 등록시켜준다. -->
+	<context:component-scan
+		base-package="kr.ac.hansung.cse.controller" />
+
+	<!-- 아래 두개의 빈은 Spring Configuration -->
+
+	<beans:bean id="tilesViewResolver"
+		class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+	</beans:bean>
+
+
+	<beans:bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<beans:property name="definitions">
+			<beans:list>
+				<!-- value에는 tiles definition에 대한 xml을 넣어줘야 한다. -->
+				<!-- war파일로 추후 패키징을 하면 루트가 webapp이 되므로 tiles.xml의 경로가 다음과 같음 -->
+				<beans:value>/WEB-INF/tiles-def/tiles.xml</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+<!-- File Upload를 위한 Bean 등록 -->
+	<beans:bean
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		id="multipartResolver">
+		<beans:property name="maxUploadSizePerFile"
+			value="10240000"></beans:property>
+	</beans:bean>
+</beans:beans>

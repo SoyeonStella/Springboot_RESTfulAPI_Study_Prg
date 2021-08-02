@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 로그백에 대한 설정을 해주는 로그백 설정 파일 -->
+
+<configuration>
+<!-- 콘솔 어펜더 -->
+	<appender name="consoleAppender"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<Pattern>.%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n
+			</Pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>TRACE</level>
+		</filter>
+	</appender>
+
+<!-- 일별 롤링파일어펜더 -->
+	<appender name="dailyRollingFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/Users/deurorina/webframe_logger/rest-demo.log</File>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>rest-demo.%d{yyyy-MM-dd}.log</FileNamePattern>
+
+			<!-- 30일 동안의 히스토리를 보관 -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 분단위 롤링파일 어펜더 -->
+	<appender name="minuteRollingFileAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover every minute -->
+			<FileNamePattern>/Users/deurorina/webframe_logger/minutes/rest-demo-minute.%d{yyyy-MM-dd_HH-mm}.log
+			</FileNamePattern>
+
+			<!-- 30분 동안의 히스토리를 보관 -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<Pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n
+			</Pattern>
+		</encoder>
+	</appender>
+
+<!-- kr.ac.hansung.cse 로거 : 로거 레벨은 DEBUG수준이며, 콘솔,일별롤링파일,분단위롤링파일에 출력됨 -->
+	<logger name="kr.ac.hansung.cse" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="dailyRollingFileAppender" />
+		<appender-ref ref="minuteRollingFileAppender" />
+		<appender-ref ref="consoleAppender" />
+	</logger>
+	
+	<!-- Hibernate sql의 파라미터 값을 로깅 -->
+	<logger name="org.hibernate.type" level="TRACE" />
+	
+
+<!-- 루트 로거 : 콘솔에 출력됨 -->
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="consoleAppender" />
+	</root>
+</configuration>
